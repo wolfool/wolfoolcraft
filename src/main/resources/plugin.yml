@@ -1,0 +1,12 @@
+name: wolfoolcraft
+version: 1.0-SNAPSHOT
+main: com.myserver.workbench.WorkbenchPlugin
+api-version: "1.21"
+depend: [CraftEngine]
+softdepend: [AuraSkills]
+author: Antigravity
+description: Custom workbench with queues, F-key installation, and mastery.
+commands:
+  wb:
+    description: 작업대 테스트 명령어
+    usage: /<command>

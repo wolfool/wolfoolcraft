@@ -1,0 +1,29 @@
+# ========================================
+# Wolfoolcraft 플러그인 설정
+# ========================================
+
+# GUI 이미지 설정 (리소스팩 커스텀 폰트 연동)
+gui:
+  workbench:
+    # 작업대 GUI 타이틀에 사용할 유니코드 문자 (리소스팩의 커스텀 폰트 이미지)
+    # 예: "\uF808\uE001" = 음수 오프셋 + 커스텀 이미지
+    title-char: "\uE010"
+    title-text: "작업대"
+  encyclopedia:
+    title-char: "\uF808\uE002"
+    title-text: "레시피 도감"
+  # GUI 내 이미지 전용 슬롯 (클릭 불가, 투명 아이템으로 채움)
+  # 이 슬롯들은 리소스팩 텍스처가 덮어쓸 영역입니다
+  image-slots:
+    workbench: [0, 6, 8, 9, 15, 16, 17, 18, 24, 26, 27, 33, 34, 35, 36, 42, 43, 44]
+    encyclopedia: [53]
+
+# 데이터베이스 설정
+database:
+  type: sqlite
+  filename: database.db
+
+# 제작 설정
+crafting:
+  max-workbenches-per-player: 5
+  default-queue-slots: 3

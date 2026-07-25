@@ -1,0 +1,87 @@
+recipes:
+  diamond_pickaxe:
+    category: "도구 제작"
+    skill-type: "forging"
+    xp-reward: 50.0
+    result:
+      material: DIAMOND_PICKAXE
+      amount: 1
+    shape:
+      - "     "
+      - " DDD "
+      - "  S  "
+      - "  S  "
+      - "     "
+    keys:
+      D:
+        material: DIAMOND
+        amount: 1
+      S:
+        material: STICK
+        amount: 1
+    crafting-time: 60
+    required-proficiency: 10
+  sword_1:
+    category: "무기"
+    result:
+      material: DIAMOND_SWORD
+      amount: 1
+    crafting-time: 10
+    shape:
+      - "     "
+      - "  D  "
+      - "  D  "
+      - "  S  "
+      - "     "
+    keys:
+      D:
+        material: DIAMOND
+        amount: 1
+      S:
+        material: STICK
+        amount: 1
+    required-proficiency: 0
+    skill-type: "forging"
+    xp-reward: 15.0
+  iron_sword:
+    category: "도구 제작"
+    skill-type: "forging"
+    xp-reward: 25.0
+    result:
+      material: IRON_SWORD
+      amount: 1
+    ingredients:
+      - material: IRON_INGOT
+        amount: 2
+      - material: STICK
+        amount: 1
+    crafting-time: 30
+    required-proficiency: 0
+  apple_concentrate:
+    category: "과일 농축"
+    skill-type: "alchemy"
+    xp-reward: 15.0
+    result:
+      material: GOLDEN_APPLE
+      amount: 1
+    ingredients:
+      - material: APPLE
+        amount: 4
+      - material: GOLD_INGOT
+        amount: 1
+    crafting-time: 45
+    required-proficiency: 5
+  fish_concentrate:
+    category: "물고기 농축"
+    skill-type: "fishing"
+    xp-reward: 20.0
+    result:
+      material: COOKED_COD
+      amount: 4
+    ingredients:
+      - material: COD
+        amount: 8
+      - material: COAL
+        amount: 1
+    crafting-time: 20
+    required-proficiency: 0

@@ -1,0 +1,14 @@
+# Gradle
+.gradle/
+build/
+gradle-8.7/
+gradle.zip
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+Thumbs.db
+.DS_Store
