@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class DatabaseManager {
     private final Plugin plugin;
@@ -40,7 +41,7 @@ public class DatabaseManager {
                 connection.close();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            plugin.getLogger().log(Level.WARNING, "데이터베이스 작업에 실패했습니다.", e);
         }
     }
 
@@ -89,7 +90,7 @@ public class DatabaseManager {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) return rs.getInt("unlocked_slots");
         } catch (SQLException e) {
-            e.printStackTrace();
+            plugin.getLogger().log(Level.WARNING, "데이터베이스 작업에 실패했습니다.", e);
         }
         return 3;
     }
@@ -103,7 +104,7 @@ public class DatabaseManager {
             ps.setInt(3, slots);
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            plugin.getLogger().log(Level.WARNING, "데이터베이스 작업에 실패했습니다.", e);
         }
     }
 
@@ -113,7 +114,7 @@ public class DatabaseManager {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) return rs.getInt("installed_workbenches");
         } catch (SQLException e) {
-            e.printStackTrace();
+            plugin.getLogger().log(Level.WARNING, "데이터베이스 작업에 실패했습니다.", e);
         }
         return 0;
     }
@@ -125,7 +126,7 @@ public class DatabaseManager {
             ps.setString(1, uuid.toString());
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            plugin.getLogger().log(Level.WARNING, "데이터베이스 작업에 실패했습니다.", e);
         }
     }
 
@@ -142,7 +143,7 @@ public class DatabaseManager {
             ps.setInt(6, session.isCollected() ? 1 : 0);
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            plugin.getLogger().log(Level.WARNING, "데이터베이스 작업에 실패했습니다.", e);
         }
     }
 
@@ -161,7 +162,7 @@ public class DatabaseManager {
                 sessions.add(session);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            plugin.getLogger().log(Level.WARNING, "데이터베이스 작업에 실패했습니다.", e);
         }
         return sessions;
     }
@@ -176,7 +177,7 @@ public class DatabaseManager {
             ps.setLong(3, System.currentTimeMillis());
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            plugin.getLogger().log(Level.WARNING, "데이터베이스 작업에 실패했습니다.", e);
         }
     }
 
@@ -188,7 +189,7 @@ public class DatabaseManager {
             ResultSet rs = ps.executeQuery();
             return rs.next();
         } catch (SQLException e) {
-            e.printStackTrace();
+            plugin.getLogger().log(Level.WARNING, "데이터베이스 작업에 실패했습니다.", e);
         }
         return false;
     }
@@ -203,7 +204,7 @@ public class DatabaseManager {
                 discovered.add(rs.getString("recipe_id"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            plugin.getLogger().log(Level.WARNING, "데이터베이스 작업에 실패했습니다.", e);
         }
         return discovered;
     }
@@ -215,7 +216,7 @@ public class DatabaseManager {
             ps.setString(2, recipeId);
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            plugin.getLogger().log(Level.WARNING, "데이터베이스 작업에 실패했습니다.", e);
         }
     }
 
@@ -227,7 +228,7 @@ public class DatabaseManager {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) return rs.getInt("craft_count");
         } catch (SQLException e) {
-            e.printStackTrace();
+            plugin.getLogger().log(Level.WARNING, "데이터베이스 작업에 실패했습니다.", e);
         }
         return 0;
     }
