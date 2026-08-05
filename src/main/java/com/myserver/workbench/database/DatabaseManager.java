@@ -130,6 +130,17 @@ public class DatabaseManager {
         }
     }
 
+    /** 제작대를 회수했을 때. 0 밑으로는 내려가지 않게 막는다. */
+    public void decrementInstalledCount(UUID uuid) {
+        try (PreparedStatement ps = connection.prepareStatement(
+                "UPDATE player_data SET installed_workbenches = MAX(installed_workbenches - 1, 0) WHERE uuid = ?")) {
+            ps.setString(1, uuid.toString());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            plugin.getLogger().log(Level.WARNING, "데이터베이스 작업에 실패했습니다.", e);
+        }
+    }
+
     public void saveSession(UUID playerUuid, com.myserver.workbench.crafting.CraftingSession session) {
         try (PreparedStatement ps = connection.prepareStatement(
                 "INSERT INTO player_queues (session_id, uuid, result_item_base64, end_time_ms, is_collected) " +

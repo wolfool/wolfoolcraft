@@ -85,3 +85,78 @@ recipes:
         amount: 1
     crafting-time: 20
     required-proficiency: 0
+  # ---- 농축 ----
+  # 재료를 material 대신 item 에 적으면 CraftEngine 아이템을 쓴다.
+  # 여기 쓰인 나무 아이템은 wood1 팩(Weekly Dot - Wood 1)에 들어 있다.
+  wood_bundle:
+    category: "농축"
+    skill-type: "foraging"
+    xp-reward: 30.0
+    result:
+      item: "wood1:woods1"
+      amount: 1
+    ingredients:
+      - item: "wood1:wood"
+        amount: 50
+    crafting-time: 60
+    required-proficiency: 0
+  wood_bundle_large:
+    category: "농축"
+    skill-type: "foraging"
+    xp-reward: 80.0
+    result:
+      item: "wood1:woods2"
+      amount: 1
+    ingredients:
+      - item: "wood1:woods1"
+        amount: 8
+    crafting-time: 180
+    required-proficiency: 0
+  stick_bundle:
+    category: "농축"
+    skill-type: "foraging"
+    xp-reward: 12.0
+    result:
+      item: "wood1:sticks"
+      amount: 1
+    ingredients:
+      - item: "wood1:stick1"
+        amount: 32
+    crafting-time: 30
+    required-proficiency: 0
+  twisted_wood_pack:
+    category: "농축"
+    skill-type: "foraging"
+    xp-reward: 45.0
+    result:
+      item: "wood1:stump"
+      amount: 1
+    ingredients:
+      - item: "wood1:twisted_wood"
+        amount: 24
+    crafting-time: 90
+    required-proficiency: 0
+  # ---- 도구함 ----
+  # 대기열 잠금을 푸는 열쇠. 급하면 /wb key 로 바로 받을 수도 있다.
+  queue_key:
+    category: "도구함"
+    skill-type: "forging"
+    xp-reward: 20.0
+    result:
+      item: "wolfoolcraft:queue_key"
+      amount: 1
+    shape:
+      - "     "
+      - "  I  "
+      - "  I  "
+      - " IRI "
+      - "     "
+    keys:
+      I:
+        material: IRON_INGOT
+        amount: 1
+      R:
+        material: REDSTONE
+        amount: 1
+    crafting-time: 30
+    required-proficiency: 0

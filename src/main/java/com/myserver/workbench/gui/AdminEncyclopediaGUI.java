@@ -46,7 +46,7 @@ public class AdminEncyclopediaGUI implements InventoryHolder {
     public static final int RELOAD_SLOT = 49;
     public static final int INFO_SLOT = 45;
 
-    public AdminEncyclopediaGUI(Player player, RecipeManager recipeManager, String currentCategory) {
+    public AdminEncyclopediaGUI(Player player, RecipeManager recipeManager, String currentCategory, com.myserver.workbench.integration.CraftEngineBridge craftEngine) {
         this.inventory = Bukkit.createInventory(this, 54, Component.text("§4[관리] 도감 관리").color(NamedTextColor.DARK_RED));
 
         Set<String> categories = new LinkedHashSet<>();
@@ -56,10 +56,10 @@ public class AdminEncyclopediaGUI implements InventoryHolder {
         List<String> catList = new ArrayList<>(categories);
         this.currentCategory = currentCategory == null && !catList.isEmpty() ? catList.get(0) : currentCategory;
 
-        initializeItems(recipeManager, catList);
+        initializeItems(player, recipeManager, catList, craftEngine);
     }
 
-    private void initializeItems(RecipeManager recipeManager, List<String> categories) {
+    private void initializeItems(Player player, RecipeManager recipeManager, List<String> categories, com.myserver.workbench.integration.CraftEngineBridge craftEngine) {
         // 1. 카테고리 탭
         for (int i = 0; i < TAB_SLOTS.length; i++) {
             if (i < categories.size()) {
@@ -88,7 +88,7 @@ public class AdminEncyclopediaGUI implements InventoryHolder {
         for (int i = 0; i < PAGE_SLOTS.size(); i++) {
             if (i < currentRecipes.size()) {
                 CustomRecipe recipe = currentRecipes.get(i);
-                ItemStack icon = recipe.getResult().clone();
+                ItemStack icon = recipe.getResult().display(craftEngine, player);
                 ItemMeta meta = icon.getItemMeta();
 
                 List<Component> lore = new ArrayList<>();
@@ -96,9 +96,12 @@ public class AdminEncyclopediaGUI implements InventoryHolder {
                 lore.add(Component.text("카테고리: " + recipe.getCategory()).color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
                 lore.add(Component.empty());
                 lore.add(Component.text("--- 재료 ---").color(NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false));
-                for (ItemStack ing : recipe.getIngredients()) {
-                    lore.add(Component.text("  • " + WorkbenchGUI.formatMaterialName(ing.getType()) + " x" + ing.getAmount())
-                        .color(NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
+                for (com.myserver.workbench.recipe.RecipeItem ing : recipe.getIngredients()) {
+                    ItemStack shown = ing.display(craftEngine, player);
+                    lore.add(Component.text("  • ").color(NamedTextColor.YELLOW)
+                        .append(WorkbenchGUI.nameOf(shown, shown.getItemMeta()).color(NamedTextColor.YELLOW))
+                        .append(Component.text(" x" + ing.amount()).color(NamedTextColor.YELLOW))
+                        .decoration(TextDecoration.ITALIC, false));
                 }
                 lore.add(Component.empty());
                 lore.add(Component.text("⏱ 제작 시간: " + (recipe.getCraftingTimeTicks() / 20) + "초").color(NamedTextColor.AQUA).decoration(TextDecoration.ITALIC, false));

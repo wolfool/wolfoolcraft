@@ -2,21 +2,92 @@
 # Wolfoolcraft 플러그인 설정
 # ========================================
 
-# GUI 이미지 설정 (리소스팩 커스텀 폰트 연동)
+# GUI 배경 이미지
+#
+# 인벤토리 배경은 창 제목에 그림 한 글자를 박아서 그린다.
+# 그림 자체는 CraftEngine 쪽 wolfoolcraft/configuration/gui.yml 에 등록돼 있고,
+# 여기 background-char 가 그 char 값과 같아야 한다.
+#
+#   offset-x      : 그림을 왼쪽으로 미는 픽셀. 제목이 창 왼쪽에서 8px 떨어져 시작하고
+#                   그림이 창보다 3px 넓어서 -11 이 기본이다. 안 맞으면 여기를 조절
+#   glyph-advance : 그림 한 글자의 폭 (그림 가로 + 1). 제목 글자를 되돌릴 때 쓴다
+#   title-text    : 비우면 그림만 나온다
+#
+# 위아래 위치는 CraftEngine gui.yml 의 ascent 로 조절한다.
 gui:
   workbench:
-    # 작업대 GUI 타이틀에 사용할 유니코드 문자 (리소스팩의 커스텀 폰트 이미지)
-    # 예: "\uF808\uE001" = 음수 오프셋 + 커스텀 이미지
-    title-char: "\uE010"
-    title-text: "작업대"
+    background-char: "\uE010"
+    background-font: "minecraft:gui"
+    offset-x: -11
+    glyph-advance: 183
+    title-text: ""
   encyclopedia:
-    title-char: "\uF808\uE002"
-    title-text: "레시피 도감"
+    background-font: "minecraft:gui"
+    offset-x: -11
+    glyph-advance: 183
+    title-text: ""
+    # 도감 탭.
+    #
+    # 배경 그림이 탭마다 통째로 다르다(tab1_selected.png ~ tab5_selected.png).
+    # 그래서 background-char 하나를 두지 않고, 탭마다 '그 탭이 눌린 그림'을 갖는다.
+    # 눌린 표시는 그림이 해주므로 탭 칸에는 투명 아이템만 놓는다.
+    #
+    # 순서는 그림의 탭 순서(위에서 아래)여야 한다. 최대 5개.
+    #   name       : 마우스를 올렸을 때 뜨는 이름
+    #   char       : 이 탭이 눌렸을 때 깔 배경 글리프. CraftEngine 쪽
+    #                wolfoolcraft/configuration/gui.yml 의 char 와 짝이어야 한다
+    #   mode       : all  = 카테고리 상관없이 전부
+    #                list = categories 에 적은 것만
+    #                rest = 다른 탭이 안 가져간 나머지 전부
+    #   categories : mode 가 list 일 때 묶을 레시피 category (recipes.yml 의 값)
+    tabs:
+      - name: "농축"
+        char: "\uE011"
+        mode: list
+        categories: ["농축", "과일 농축", "물고기 농축"]
+      - name: "도구·무기"
+        char: "\uE012"
+        mode: list
+        categories: ["도구 제작", "무기"]
+      - name: "갑옷"
+        char: "\uE013"
+        mode: list
+        categories: ["갑옷"]
+      - name: "가구"
+        char: "\uE014"
+        mode: list
+        categories: ["가구"]
+      # 어느 탭에도 안 묶인 카테고리가 사라지지 않게 마지막은 '나머지' 로 둔다.
+      - name: "도구함"
+        char: "\uE015"
+        mode: rest
   # GUI 내 이미지 전용 슬롯 (클릭 불가, 투명 아이템으로 채움)
   # 이 슬롯들은 리소스팩 텍스처가 덮어쓸 영역입니다
+  #
+  # 도감은 책 칸이 가로 7칸(0~6열)이다.
+  # 7열(7, 16, 25, 34, 43)은 탭을 누르는 자리라 코드가 따로 채우고,
+  # 8열은 탭 띠의 오른쪽 꼬리라 여기서 막는다.
   image-slots:
     workbench: [0, 6, 8, 9, 15, 16, 17, 18, 24, 26, 27, 33, 34, 35, 36, 42, 43, 44]
-    encyclopedia: [53]
+    encyclopedia: [8, 17, 26, 35, 44, 46, 47, 48, 49, 50, 51, 52, 53]
+  # 위 슬롯을 막을 아이템. 완전 투명해서 배경 그림이 그대로 비친다.
+  # CraftEngine 이 없거나 이 아이템이 없으면 회색 유리로 대신 막는다(배경은 가려진다).
+  filler-item-id: "wolfoolcraft:empty"
+
+# 제작대 아이템/가구 ID (CraftEngine 에 정의된 것)
+# item-id      : 손에 드는 설치용 아이템
+# furniture-id : 설치했을 때 놓이는 가구
+workbench:
+  item-id: "wolfoolcraft:workbench"
+  furniture-id: "wolfoolcraft:workbench"
+  # 잠긴 대기열 칸을 열 때 소모하는 아이템
+  queue-key-id: "wolfoolcraft:queue_key"
+
+  # 설치 미리보기 크기와 높이.
+  # CraftEngine 가구 yml 의 scale / translation.y 와 반드시 같아야 한다.
+  # 다르면 미리보기와 실제로 놓인 물건이 어긋나 보인다.
+  preview-scale: 0.75
+  preview-y-offset: 0.375
 
 # 데이터베이스 설정
 database:
@@ -26,4 +97,7 @@ database:
 # 제작 설정
 crafting:
   max-workbenches-per-player: 5
+  # 처음에 열려 있는 대기열 칸. 나머지는 열쇠로 연다
   default-queue-slots: 3
+  # 열쇠로 넓힐 수 있는 상한 (GUI 하단이 9칸이라 그 이상은 안 된다)
+  max-queue-slots: 9

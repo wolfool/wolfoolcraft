@@ -1,21 +1,23 @@
 package com.myserver.workbench.recipe;
 
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class RecipeManager {
     private final Plugin plugin;
-    private final Map<String, CustomRecipe> recipes = new HashMap<>();
+    // 도감에 뜨는 순서가 recipes.yml 에 적은 순서와 같도록 순서를 지키는 맵을 쓴다.
+    private final Map<String, CustomRecipe> recipes = new LinkedHashMap<>();
+    /** 같은 검사 결과를 두 번 찍지 않으려고 들고 있는다. */
+    private String lastValidationReport;
 
     public RecipeManager(Plugin plugin) {
         this.plugin = plugin;
@@ -23,6 +25,7 @@ public class RecipeManager {
 
     public void loadRecipes() {
         recipes.clear();
+        lastValidationReport = null;   // 다시 읽었으면 검사 결과도 다시 알려준다
         File file = new File(plugin.getDataFolder(), "recipes.yml");
         if (!file.exists()) {
             plugin.saveResource("recipes.yml", false);
@@ -36,19 +39,13 @@ public class RecipeManager {
             ConfigurationSection recipeSec = section.getConfigurationSection(key);
             if (recipeSec == null) continue;
 
-            // Load Result
-            String resultMatName = recipeSec.getString("result.material", "STONE");
-            int amount = recipeSec.getInt("result.amount", 1);
-            ItemStack result = new ItemStack(Material.valueOf(resultMatName.toUpperCase()), amount);
-            // TODO: Support CraftEngine items via API instead of standard Material
+            // 결과물. material 대신 item 에 CraftEngine ID 를 적어도 된다.
+            RecipeItem result = RecipeItem.parse(plugin, recipeSec, "result", key + " 의 result");
 
-            // Load Ingredients
-            List<ItemStack> ingredients = new ArrayList<>();
-            List<Map<?, ?>> ingList = recipeSec.getMapList("ingredients");
-            for (Map<?, ?> ingMap : ingList) {
-                String mat = ingMap.containsKey("material") ? (String) ingMap.get("material") : "STONE";
-                int amt = ingMap.containsKey("amount") ? (Integer) ingMap.get("amount") : 1;
-                ingredients.add(new ItemStack(Material.valueOf(mat.toUpperCase()), amt));
+            // 재료 (무형)
+            List<RecipeItem> ingredients = new ArrayList<>();
+            for (Map<?, ?> ingMap : recipeSec.getMapList("ingredients")) {
+                ingredients.add(RecipeItem.parse(plugin, ingMap, key + " 의 ingredients"));
             }
 
             // Load settings
@@ -60,15 +57,13 @@ public class RecipeManager {
 
             // Load Shaped
             List<String> shape = recipeSec.getStringList("shape");
-            Map<Character, ItemStack> keys = new HashMap<>();
+            Map<Character, RecipeItem> keys = new HashMap<>();
             ConfigurationSection keysSec = recipeSec.getConfigurationSection("keys");
             if (keysSec != null) {
                 for (String keyChar : keysSec.getKeys(false)) {
-                    if (keyChar.length() > 0) {
-                        String matName = keysSec.getString(keyChar + ".material", "STONE");
-                        int amt = keysSec.getInt(keyChar + ".amount", 1);
-                        keys.put(keyChar.charAt(0), new ItemStack(Material.valueOf(matName.toUpperCase()), amt));
-                    }
+                    if (keyChar.isEmpty()) continue;
+                    keys.put(keyChar.charAt(0),
+                            RecipeItem.parse(plugin, keysSec, keyChar, key + " 의 keys." + keyChar));
                 }
             }
 
@@ -77,6 +72,46 @@ public class RecipeManager {
         }
         
         plugin.getLogger().info("Loaded " + recipes.size() + " custom recipes.");
+    }
+
+    /**
+     * 레시피에 적힌 CraftEngine 아이템이 실제로 있는지 본다.
+     *
+     * <p>없는 ID 는 GUI 를 열어야 티가 나고, 그때는 재료가 종이로 보일 뿐 이유를
+     * 알 수 없다. 오타를 서버 켤 때 바로 알려준다.
+     */
+    public void validateCustomItems(com.myserver.workbench.integration.CraftEngineBridge craftEngine) {
+        if (!craftEngine.isAvailable()) return;
+
+        java.util.Set<String> checked = new java.util.LinkedHashSet<>();
+        java.util.Set<String> missing = new java.util.LinkedHashSet<>();
+        for (CustomRecipe recipe : recipes.values()) {
+            List<RecipeItem> all = new ArrayList<>(recipe.getIngredients());
+            all.addAll(recipe.getKeys().values());
+            all.add(recipe.getResult());
+            for (RecipeItem item : all) {
+                String id = item.craftEngineId();
+                if (id == null) continue;
+                checked.add(id);
+                if (!craftEngine.hasItem(id)) {
+                    missing.add(recipe.getId() + " -> " + id);
+                }
+            }
+        }
+
+        if (checked.isEmpty()) return;
+
+        // CraftEngine 은 켜질 때 리로드 이벤트를 두 번 날린다. 결과가 그대로면 잠자코 있는다.
+        String report = checked.size() + "/" + missing;
+        if (report.equals(lastValidationReport)) return;
+        lastValidationReport = report;
+
+        for (String entry : missing) {
+            plugin.getLogger().warning("레시피가 없는 CraftEngine 아이템을 가리킨다: " + entry);
+        }
+        if (missing.isEmpty()) {
+            plugin.getLogger().info("레시피가 쓰는 CraftEngine 아이템 " + checked.size() + "종 확인 완료.");
+        }
     }
 
     public Map<String, CustomRecipe> getRecipes() {

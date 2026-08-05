@@ -27,6 +27,26 @@ public class CraftingManager {
             databaseManager.updateUnlockedSlots(playerId, current + 1);
         }
     }
+
+    /** 대기열 칸 수를 그대로 정한다. 잠금을 되돌릴 때 쓴다. */
+    public void setUnlockedSlots(UUID playerId, int slots) {
+        databaseManager.updateUnlockedSlots(playerId, Math.max(0, Math.min(9, slots)));
+    }
+
+    /**
+     * 제작을 시작했다고 기록한다.
+     *
+     * <p>완성이 아니라 시작 시점에 센다. 숙련도 XP 를 주는 시점과 같아야
+     * {@code /wb xp} 에서 본 숫자끼리 앞뒤가 맞는다.
+     */
+    public void recordCraft(UUID playerId, String recipeId) {
+        databaseManager.discoverRecipe(playerId, recipeId);
+        databaseManager.incrementCraftCount(playerId, recipeId);
+    }
+
+    public int getCraftCount(UUID playerId, String recipeId) {
+        return databaseManager.getCraftCount(playerId, recipeId);
+    }
     
     public void loadPlayer(UUID playerId) {
         List<CraftingSession> loaded = databaseManager.loadSessions(playerId);

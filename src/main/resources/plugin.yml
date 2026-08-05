@@ -8,5 +8,5 @@ author: Antigravity
 description: Custom workbench with queues, F-key installation, and mastery.
 commands:
   wb:
-    description: 작업대 테스트 명령어
-    usage: /<command>
+    description: 작업대 명령어
+    usage: /<command> [gui|item|key|xp|lock|admin|reload]

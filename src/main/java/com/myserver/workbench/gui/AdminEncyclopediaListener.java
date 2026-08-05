@@ -14,9 +14,11 @@ import java.util.Set;
 
 public class AdminEncyclopediaListener implements Listener {
     private final RecipeManager recipeManager;
+    private final com.myserver.workbench.integration.CraftEngineBridge craftEngine;
 
-    public AdminEncyclopediaListener(RecipeManager recipeManager) {
+    public AdminEncyclopediaListener(RecipeManager recipeManager, com.myserver.workbench.integration.CraftEngineBridge craftEngine) {
         this.recipeManager = recipeManager;
+        this.craftEngine = craftEngine;
     }
 
     @EventHandler
@@ -39,7 +41,7 @@ public class AdminEncyclopediaListener implements Listener {
                 }
                 List<String> catList = new ArrayList<>(categories);
                 if (i < catList.size()) {
-                    AdminEncyclopediaGUI newGui = new AdminEncyclopediaGUI(player, recipeManager, catList.get(i));
+                    AdminEncyclopediaGUI newGui = new AdminEncyclopediaGUI(player, recipeManager, catList.get(i), craftEngine);
                     player.openInventory(newGui.getInventory());
                     return;
                 }
@@ -49,8 +51,9 @@ public class AdminEncyclopediaListener implements Listener {
         // 리로드 버튼 클릭
         if (slot == AdminEncyclopediaGUI.RELOAD_SLOT) {
             recipeManager.loadRecipes();
+            recipeManager.validateCustomItems(craftEngine);
             player.sendMessage("§a[관리] 레시피 설정을 다시 불러왔습니다!");
-            AdminEncyclopediaGUI newGui = new AdminEncyclopediaGUI(player, recipeManager, gui.getCurrentCategory());
+            AdminEncyclopediaGUI newGui = new AdminEncyclopediaGUI(player, recipeManager, gui.getCurrentCategory(), craftEngine);
             player.openInventory(newGui.getInventory());
             return;
         }

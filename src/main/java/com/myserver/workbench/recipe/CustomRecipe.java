@@ -1,6 +1,5 @@
 package com.myserver.workbench.recipe;
 
-import org.bukkit.inventory.ItemStack;
 import java.util.List;
 import java.util.Map;
 
@@ -9,14 +8,14 @@ public class CustomRecipe {
     private final String category;
     private final String skillType;
     private final double xpReward;
-    private final ItemStack result;
-    private final List<ItemStack> ingredients;
+    private final RecipeItem result;
+    private final List<RecipeItem> ingredients;
     private final long craftingTimeTicks;
     private final int requiredProficiency;
     private final List<String> shape;
-    private final Map<Character, ItemStack> keys;
+    private final Map<Character, RecipeItem> keys;
 
-    public CustomRecipe(String id, String category, String skillType, double xpReward, ItemStack result, List<ItemStack> ingredients, long craftingTimeTicks, int requiredProficiency, List<String> shape, Map<Character, ItemStack> keys) {
+    public CustomRecipe(String id, String category, String skillType, double xpReward, RecipeItem result, List<RecipeItem> ingredients, long craftingTimeTicks, int requiredProficiency, List<String> shape, Map<Character, RecipeItem> keys) {
         this.id = id;
         this.category = category;
         this.skillType = skillType;
@@ -45,11 +44,11 @@ public class CustomRecipe {
         return xpReward;
     }
 
-    public ItemStack getResult() {
+    public RecipeItem getResult() {
         return result;
     }
 
-    public List<ItemStack> getIngredients() {
+    public List<RecipeItem> getIngredients() {
         return ingredients;
     }
 
@@ -65,7 +64,7 @@ public class CustomRecipe {
         return shape;
     }
 
-    public Map<Character, ItemStack> getKeys() {
+    public Map<Character, RecipeItem> getKeys() {
         return keys;
     }
 
