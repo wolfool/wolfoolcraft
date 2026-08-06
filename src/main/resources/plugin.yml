@@ -1,6 +1,6 @@
 name: wolfoolcraft
 version: 1.0-SNAPSHOT
-main: com.myserver.workbench.WorkbenchPlugin
+main: com.wolfool.workbench.WorkbenchPlugin
 api-version: "1.21"
 depend: [CraftEngine]
 softdepend: [AuraSkills]
@@ -9,4 +9,9 @@ description: Custom workbench with queues, F-key installation, and mastery.
 commands:
   wb:
     description: 작업대 명령어
-    usage: /<command> [gui|item|key|xp|lock|admin|reload]
+    usage: /<command> [gui|item|key|xp|lock|admin|edit|reload]
+
+permissions:
+  workbench.admin:
+    description: 레시피 편집 GUI(/wb edit)와 관리 기능을 씁니다
+    default: op

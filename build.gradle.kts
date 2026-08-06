@@ -2,7 +2,7 @@ plugins {
     java
 }
 
-group = "com.myserver.workbench"
+group = "com.wolfool.workbench"
 version = "1.0-SNAPSHOT"
 
 repositories {
