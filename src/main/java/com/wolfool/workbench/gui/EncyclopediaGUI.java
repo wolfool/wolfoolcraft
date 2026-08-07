@@ -178,7 +178,9 @@ public class EncyclopediaGUI implements InventoryHolder {
             ItemMeta meta = locked.getItemMeta();
             meta.displayName(Component.text("???")
                     .color(NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false));
-            meta.lore(List.of(Component.text("요구 숙련도: " + recipe.getRequiredProficiency())
+            meta.lore(List.of(Component.text("요구 숙련도: "
+                            + skills.displayName(recipe.getSkillType()) + " "
+                            + recipe.getRequiredProficiency() + "레벨")
                     .color(NamedTextColor.RED).decoration(TextDecoration.ITALIC, false)));
             locked.setItemMeta(meta);
             return locked;

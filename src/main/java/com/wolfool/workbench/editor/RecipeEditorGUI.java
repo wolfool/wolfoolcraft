@@ -177,7 +177,8 @@ public final class RecipeEditorGUI implements InventoryHolder {
         List<String> profLore = new ArrayList<>();
         profLore.add("§7이 값 이상이어야 만들 수 있습니다.");
         if (draft.requiredProficiency() > 0) {
-            profLore.add("§c AuraSkills 가 없으면 영영 잠깁니다.");
+            profLore.add("§c위 직업인 사람만 만들 수 있게 됩니다.");
+            profLore.add("§8직업은 한 사람당 하나뿐입니다.");
         }
         profLore.add("");
         profLore.add("§e좌클릭 §7+1 §8/ §e우클릭 §7-1");

@@ -123,20 +123,18 @@ public final class RecipeEditorListener implements Listener {
     }
 
     /**
-     * 고를 수 있는 스킬.
+     * 고를 수 있는 스킬 — 이 서버에서는 <b>Mastery 의 직업</b>입니다.
      *
-     * <p><b>AuraSkills 에 실제로 있는 이름만 적습니다.</b> 없는 이름을 쓰면
-     * {@code Skills.valueOf} 가 예외를 내고, 그 레시피는 경험치를 한 톨도 주지
-     * 못합니다 — 게다가 조용히 실패해서 눈치채기 어렵습니다.
+     * <p><b>Mastery 에 실제로 있는 이름만 적습니다.</b> 없는 이름을 쓰면 그 레시피의
+     * 요구 숙련도가 영영 안 채워집니다 — 조용히 잠긴 채로 있어서 눈치채기 어렵습니다.
      *
-     * <p>AuraSkills 2.3.12 에는 <b>forging 이 없습니다.</b> 대장일 계열은
-     * mining 으로 잇고 있습니다.
+     * <p><b>한 사람은 직업을 하나만 가집니다.</b> 요구 숙련도를 0 보다 크게 걸면
+     * 그 직업인 사람만 만들 수 있게 됩니다. AuraSkills 때와 다른 점입니다 —
+     * 그때는 모두가 모든 스킬을 같이 올렸습니다.
      */
     private List<String> knownSkills() {
         Set<String> out = new LinkedHashSet<>(List.of(
-                "mining", "foraging", "fishing", "alchemy",
-                "farming", "excavation", "archery", "defense",
-                "fighting", "agility", "enchanting"));
+                "farmer", "fisher", "miner", "cook"));
         for (CustomRecipe r : recipes.getRecipes().values()) out.add(r.getSkillType());
         return new ArrayList<>(out);
     }

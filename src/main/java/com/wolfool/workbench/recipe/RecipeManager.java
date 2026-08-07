@@ -50,7 +50,8 @@ public class RecipeManager {
 
             // Load settings
             String category = recipeSec.getString("category", "기본");
-            String skillType = recipeSec.getString("skill-type", "forging");
+            // Mastery 의 직업 이름이다 — farmer · fisher · miner · cook
+            String skillType = recipeSec.getString("skill-type", "miner");
             double xpReward = recipeSec.getDouble("xp-reward", 10.0);
             long timeSec = recipeSec.getLong("crafting-time", 10); // in seconds
             int proficiency = recipeSec.getInt("required-proficiency", 0);

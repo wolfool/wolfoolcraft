@@ -155,7 +155,8 @@ public class WorkbenchGUIListener implements Listener {
 
                 // 숙련도가 모자라면 재료만 날린다. 제작 직전에 한 번 더 막는다.
                 if (!skills.meets(player, recipe.getSkillType(), recipe.getRequiredProficiency())) {
-                    player.sendMessage("§c[작업대] 숙련도가 부족합니다. §7(요구 "
+                    player.sendMessage("§c[작업대] 숙련도가 부족합니다. §7("
+                            + skills.displayName(recipe.getSkillType()) + " "
                             + recipe.getRequiredProficiency() + "레벨)");
                     return;
                 }
@@ -342,7 +343,8 @@ public class WorkbenchGUIListener implements Listener {
             return;
         }
         if (!skills.meets(player, recipe.getSkillType(), recipe.getRequiredProficiency())) {
-            player.sendMessage("§c[작업대] 숙련도가 부족합니다. §7(요구 "
+            player.sendMessage("§c[작업대] 숙련도가 부족합니다. §7("
+                    + skills.displayName(recipe.getSkillType()) + " "
                     + recipe.getRequiredProficiency() + "레벨)");
             return;
         }

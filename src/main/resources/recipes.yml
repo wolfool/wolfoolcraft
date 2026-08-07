@@ -1,7 +1,7 @@
 recipes:
   diamond_pickaxe:
     category: "도구 제작"
-    skill-type: "forging"
+    skill-type: "miner"
     xp-reward: 50.0
     result:
       material: DIAMOND_PICKAXE
@@ -41,11 +41,11 @@ recipes:
         material: STICK
         amount: 1
     required-proficiency: 0
-    skill-type: "forging"
+    skill-type: "miner"
     xp-reward: 15.0
   iron_sword:
     category: "도구 제작"
-    skill-type: "forging"
+    skill-type: "miner"
     xp-reward: 25.0
     result:
       material: IRON_SWORD
@@ -59,7 +59,7 @@ recipes:
     required-proficiency: 0
   apple_concentrate:
     category: "과일 농축"
-    skill-type: "alchemy"
+    skill-type: "farmer"
     xp-reward: 15.0
     result:
       material: GOLDEN_APPLE
@@ -73,7 +73,7 @@ recipes:
     required-proficiency: 5
   fish_concentrate:
     category: "물고기 농축"
-    skill-type: "fishing"
+    skill-type: "fisher"
     xp-reward: 20.0
     result:
       material: COOKED_COD
@@ -90,7 +90,7 @@ recipes:
   # 여기 쓰인 나무 아이템은 wood1 팩(Weekly Dot - Wood 1)에 들어 있다.
   wood_bundle:
     category: "농축"
-    skill-type: "foraging"
+    skill-type: "farmer"
     xp-reward: 30.0
     result:
       item: "wood1:woods1"
@@ -102,7 +102,7 @@ recipes:
     required-proficiency: 0
   wood_bundle_large:
     category: "농축"
-    skill-type: "foraging"
+    skill-type: "farmer"
     xp-reward: 80.0
     result:
       item: "wood1:woods2"
@@ -114,7 +114,7 @@ recipes:
     required-proficiency: 0
   stick_bundle:
     category: "농축"
-    skill-type: "foraging"
+    skill-type: "farmer"
     xp-reward: 12.0
     result:
       item: "wood1:sticks"
@@ -126,7 +126,7 @@ recipes:
     required-proficiency: 0
   twisted_wood_pack:
     category: "농축"
-    skill-type: "foraging"
+    skill-type: "farmer"
     xp-reward: 45.0
     result:
       item: "wood1:stump"
@@ -140,7 +140,7 @@ recipes:
   # 대기열 잠금을 푸는 열쇠. 급하면 /wb key 로 바로 받을 수도 있다.
   queue_key:
     category: "도구함"
-    skill-type: "forging"
+    skill-type: "miner"
     xp-reward: 20.0
     result:
       item: "wolfoolcraft:queue_key"

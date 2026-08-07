@@ -45,7 +45,7 @@ public final class RecipeDraft {
         this.originalId = originalId;
         this.id = originalId;
         this.category = "기본";
-        this.skillType = "forging";
+        this.skillType = "miner";
         this.xpReward = 10.0;
         this.craftingTimeSeconds = 10;
         this.requiredProficiency = 0;

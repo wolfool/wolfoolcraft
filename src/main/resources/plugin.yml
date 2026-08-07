@@ -3,7 +3,9 @@ version: 1.0-SNAPSHOT
 main: com.wolfool.workbench.WorkbenchPlugin
 api-version: "1.21"
 depend: [CraftEngine]
-softdepend: [AuraSkills]
+# Mastery 가 직업 숙련도를 들고 있다. 먼저 켜져야 레시피 잠금이 제대로 걸린다.
+# 없으면 요구 숙련도가 0 인 레시피만 열린다
+softdepend: [Mastery]
 author: Antigravity
 description: Custom workbench with queues, F-key installation, and mastery.
 commands:

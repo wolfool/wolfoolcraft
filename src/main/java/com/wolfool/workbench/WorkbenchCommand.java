@@ -194,15 +194,18 @@ public class WorkbenchCommand implements CommandExecutor, TabCompleter {
     /**
      * 숙련도와 제작 횟수.
      *
-     * <p>제작하면 XP 를 주는데 그게 어디로 갔는지 볼 방법이 없었다. AuraSkills 가
-     * 없으면 줄 곳이 없다는 것도 여기서 분명히 알려준다.
+     * <p>레시피가 왜 잠겨 있는지 볼 방법이 없었다. 숙련도를 물어볼 곳이 아예 없는
+     * 상태인 것도 여기서 분명히 알려준다.
+     *
+     * <p><b>제작으로는 숙련도가 안 오른다.</b> Mastery 는 직업 활동으로만 오른다 —
+     * 레시피의 {@code xp-reward} 는 지금 아무 데도 안 쌓인다.
      */
     private void showSkillStatus(Player player) {
         player.sendMessage("§6=== 제작 숙련도 ===");
 
         if (!skills.isAvailable()) {
-            player.sendMessage("§cAuraSkills 가 없습니다. §7제작해도 숙련도가 오르지 않고,");
-            player.sendMessage("§7요구 숙련도가 있는 레시피는 계속 잠긴 채로 있습니다.");
+            player.sendMessage("§cMastery 가 없습니다. §7요구 숙련도가 있는 레시피는");
+            player.sendMessage("§7계속 잠긴 채로 있습니다.");
         }
 
         // 레시피에 실제로 쓰인 스킬만 모은다. 순서는 recipes.yml 순서를 따른다.
@@ -218,7 +221,6 @@ public class WorkbenchCommand implements CommandExecutor, TabCompleter {
         for (var entry : bySkill.entrySet()) {
             String skill = entry.getKey();
             int level = skills.levelOf(player, skill);
-            double xp = skills.xpOf(player, skill);
 
             int locked = 0;
             int crafted = 0;
@@ -227,13 +229,12 @@ public class WorkbenchCommand implements CommandExecutor, TabCompleter {
                 crafted += craftingManager.getCraftCount(player.getUniqueId(), recipe.getId());
             }
 
-            StringBuilder line = new StringBuilder("§f" + skill + " §7- ");
+            StringBuilder line = new StringBuilder("§f" + skills.displayName(skill) + " §7- ");
             if (skills.isAvailable() && !skills.knowsSkill(skill)) {
-                // 레시피에 적은 이름이 AuraSkills 에 없다. 오타면 XP 가 조용히 버려진다.
-                line.append("§cAuraSkills 에 없는 스킬 이름");
+                // 레시피에 적은 이름이 Mastery 에 없다. 오타면 요구 숙련도가 영영 안 채워진다.
+                line.append("§c그런 직업이 없습니다 §8(farmer·fisher·miner·cook)");
             } else {
-                line.append("§b레벨 ").append(level)
-                        .append(" §7(XP ").append(String.format("%.1f", xp)).append(")");
+                line.append("§b레벨 ").append(level);
             }
             line.append(" §7| 레시피 ").append(entry.getValue().size()).append("개");
             if (locked > 0) line.append(" §c(잠김 ").append(locked).append(")");
@@ -243,5 +244,6 @@ public class WorkbenchCommand implements CommandExecutor, TabCompleter {
 
         player.sendMessage("§7총 제작 횟수: §f" + totalCrafts + "회");
         player.sendMessage("§8제작 횟수는 완성이 아니라 '제작을 시작한' 시점에 셉니다.");
+        player.sendMessage("§8숙련도는 제작이 아니라 직업 활동으로 오릅니다. §7/숙련");
     }
 }
